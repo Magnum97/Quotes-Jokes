@@ -1,0 +1,62 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'kr.entree.spigradle' version '1.2.4'
+    id "io.freefair.lombok" version "4.1.6"
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
+}
+
+group = 'me.magnum'
+version = '1.0'
+description = 'What it does'
+sourceCompatibility = '1.8'
+archivesBaseName = 'Plugin' // Put your artifactId here
+
+mainClassName = 'me.magnum.main'
+
+// See https://github.com/EntryPointKR/Spigradle#repositories for repository shortcodes
+repositories {
+    mavenCentral()
+paper()	
+enderZone()	
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+    jitpack() // For vault
+}
+
+dependencies {
+spigot()
+
+    compileOnly group: 'org.spigotmc', name: 'spigot', version: '1.12.2-R0.1-SNAPSHOT' // No Shaded
+}
+
+shadowJar {
+    classifier = null // remove -all from end of jar
+}
+spigot {
+    authors = ['Me']
+    depends = ['ProtocolLib']
+    apiVersion = '1.15'
+    load = STARTUP
+    commands {
+        give {
+            aliases = ['i']
+            description = 'Give command.'
+            permission = 'test.foo'
+            permissionMessage = 'You do not have permission!'
+            usage = '/<command> [test|stop]'
+        }
+    }
+    permissions {
+        'test.foo' {
+            description = 'Allows foo command'
+            defaults = 'true'
+        }
+        'test.*' {
+            description = 'Wildcard permission'
+            defaults = 'op'
+            children = ['test.foo': true]
+        }
+    }
+}
