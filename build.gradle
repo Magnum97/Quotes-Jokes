@@ -25,12 +25,14 @@ dependencies {
     implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
     implementation 'com.github.javafactorydev:lightningstorage:3.1.6'
 }
+/*
 compileJava {
     options.compilerArgs += ["-parameters"]
     options.fork = true
     options.forkOptions.executable = 'javac'
 }
-
+*/
+tasks.prepareSpigotPlugins.dependsOn shadowJar
 shadowJar {
     classifier = null // remove -all from end of jar
 }
