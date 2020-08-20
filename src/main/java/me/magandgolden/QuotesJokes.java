@@ -1,4 +1,7 @@
 package me.magandgolden;
 
-public class QuotesJokes {
+import co.aikar.commands.BukkitCommandManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class QuotesJokes extends JavaPlugin {
 }
