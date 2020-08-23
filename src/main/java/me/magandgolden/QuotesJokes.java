@@ -11,11 +11,13 @@ public class QuotesJokes extends JavaPlugin {
 
 	public void onEnable () {
 		createConfigs();
-		register();
+		registerCommands();
 	}
 
-	private void register() {
+	@SuppressWarnings ("deprecation")
+	private void registerCommands () {
 		BukkitCommandManager manager = new BukkitCommandManager(this);
+		manager.enableUnstableAPI("help");
 		manager.registerCommand(new Random());
 	}
 

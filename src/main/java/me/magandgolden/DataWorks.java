@@ -1,21 +1,18 @@
 package me.magandgolden;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DataWorks {
 
-    public DataWorks () {
-    }
-    @Getter
-    @Setter
-    private List <String> jokes = new ArrayList<>();
+	@Getter
+	private List <String> jokes = new ArrayList <>();
+	@Getter
+	private List <String> quotes = new ArrayList <>();
 
+	public DataWorks () {
+	}
 
-    @Getter
-    @Setter
-    private List <String> quotes = new ArrayList<>();
 }
