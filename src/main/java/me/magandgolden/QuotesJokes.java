@@ -1,5 +1,6 @@
 package me.magandgolden;
 
+import co.aikar.commands.BukkitCommandManager;
 import de.leonhard.storage.Yaml;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,6 +11,12 @@ public class QuotesJokes extends JavaPlugin {
 
 	public void onEnable () {
 		createConfigs();
+		register();
+	}
+
+	private void register() {
+		BukkitCommandManager manager = new BukkitCommandManager(this);
+		manager.registerCommand(new Random());
 	}
 
 	private void createConfigs () {

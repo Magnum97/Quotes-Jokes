@@ -13,6 +13,8 @@ public class DataWorks {
     @Getter
     @Setter
     private List <String> jokes = new ArrayList<>();
+
+
     @Getter
     @Setter
     private List <String> quotes = new ArrayList<>();
