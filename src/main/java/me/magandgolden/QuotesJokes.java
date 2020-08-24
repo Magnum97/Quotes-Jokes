@@ -2,39 +2,37 @@ package me.magandgolden;
 
 import co.aikar.commands.BukkitCommandManager;
 import de.leonhard.storage.Yaml;
+import lombok.Getter;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class QuotesJokes extends JavaPlugin {
 
+	@Getter
+	private Plugin instance;
+	@Getter
+	private Yaml quoteFile;
+	@Getter
+	private Yaml jokeFile;
+
+
 	public void onEnable () {
+		instance = this;
 		createConfigs();
-		registerCommands();
+		addCommands();
 	}
 
-	@SuppressWarnings ("deprecation")
-	private void registerCommands () {
-		BukkitCommandManager manager = new BukkitCommandManager(this);
-		manager.enableUnstableAPI("help");
-		manager.registerCommand(new Random());
+	private void addCommands () {
+		BukkitCommandManager commandManager = new BukkitCommandManager(instance);
+		//noinspection deprecation
+		commandManager.enableUnstableAPI("help");
+		commandManager.registerCommand(new MainCommand());
 	}
 
 	private void createConfigs () {
-		// This will create "quotes.yml" in the plugins' folder.
-		Yaml quoteFile = new Yaml("quotes", getDataFolder().toString(), getResource("quotes.yml"));
-		Yaml jokeFile = new Yaml("jokes", getDataFolder().toString(), getResource("jokes.yml"));
-
-
-		// When making object like list, or Set you need to specify what will be in the list/set
-		// with < > around it.
-
-		// Note two ways to do this. You can do it on two lines
-		List <String> quoteList = new ArrayList <>();
-		quoteList = quoteFile.getStringList("quotes");
-
-		// or combine it and do on one line.
-		List <String> jokeList = jokeFile.getStringList("jokes");
+		// This will create "quotes.yml" in the plugins' folder
+		// or load if they already exist.
+		quoteFile = new Yaml("quotes", getDataFolder().toString(), getResource("quotes.yml"));
+		jokeFile = new Yaml("jokes", getDataFolder().toString(), getResource("jokes.yml"));
 	}
 }
