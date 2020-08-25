@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @CommandAlias ("random")
 public class MainCommand extends BaseCommand {
 
-	private static QuotesJokes plugin = QuotesJokes.getPlugin();
+	private static final QuotesJokes plugin = QuotesJokes.getPlugin();
 
 	@Subcommand ("joke")
 	private static void onJoke (CommandSender sender, @Optional String action, @Optional String[] arg2) {
