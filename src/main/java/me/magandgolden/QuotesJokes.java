@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class QuotesJokes extends JavaPlugin {
 
 	@Getter
-	private Plugin instance;
+	private static QuotesJokes plugin;
 	@Getter
 	private Yaml quoteFile;
 	@Getter
@@ -17,13 +17,13 @@ public class QuotesJokes extends JavaPlugin {
 
 
 	public void onEnable () {
-		instance = this;
+		plugin = this;
 		createConfigs();
 		addCommands();
 	}
 
 	private void addCommands () {
-		BukkitCommandManager commandManager = new BukkitCommandManager(instance);
+		BukkitCommandManager commandManager = new BukkitCommandManager(plugin);
 		//noinspection deprecation
 		commandManager.enableUnstableAPI("help");
 		commandManager.registerCommand(new MainCommand());
