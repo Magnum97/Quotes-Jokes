@@ -27,8 +27,14 @@ public class MainCommand extends BaseCommand {
 				// if joke is added to command, add to file.
 				jokes.getStringList("jokes").add(Arrays.toString(arg2));
 				jokes.write();
-					sender.sendMessage("Your joke was added!");
+				sender.sendMessage("Your joke was added!");
 				return;
+			}
+			if (action.equals("list")) {
+				for (int i = 0; i < jokes.getStringList("jokes").size(); i++) {
+					sender.sendMessage((i + 1) + ": " + jokes.getStringList("jokes").get(i));
+				}
+			return;
 			}
 			int JokeCount = plugin.getJokeFile().getStringList("jokes").size();
 			int choose = ThreadLocalRandom.current().nextInt(JokeCount);
@@ -47,7 +53,7 @@ public class MainCommand extends BaseCommand {
 				}
 				quotes.getStringList("quotes").add(Arrays.toString(arg2));
 				quotes.write();
-					sender.sendMessage("Your quote was added!");
+				sender.sendMessage("Your quote was added!");
 				return;
 			}
 			int QuoteCount = plugin.getQuoteFile().getStringList("quotes").size();
