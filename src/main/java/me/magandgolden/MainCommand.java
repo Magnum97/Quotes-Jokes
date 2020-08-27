@@ -65,7 +65,6 @@ public class MainCommand extends BaseCommand {
 				sendList(sender, quoteList);
 		}
 	}
-}
 
 	private static void addFile (CommandSender sender, Yaml file, String key, String text) {
 		List <String> list = file.getStringList(key);
@@ -77,7 +76,8 @@ public class MainCommand extends BaseCommand {
 
 	private static void sendList (CommandSender sender, List <String> list) {
 		for (int i = 0; i < list.size(); i++) {
-			sender.sendMessage((i + 1) + ": " + list.get(i));
+			String message = ChatColor.translateAlternateColorCodes('&',list.get(i));
+			sender.sendMessage((i + 1) + ": " + message);
 		}
 
 	}
@@ -107,7 +107,8 @@ public class MainCommand extends BaseCommand {
 	private static void sendRandom (CommandSender sender, List <String> list) {
 		int jokeCount = list.size();
 		int choice = ThreadLocalRandom.current().nextInt(jokeCount);
-		sender.sendMessage(list.get(choice));
+		String message= ChatColor.translateAlternateColorCodes('&',list.get(choice));
+		sender.sendMessage(message);
 	}
 
 	private static String joinString (String[] array) {
