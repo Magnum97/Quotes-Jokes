@@ -14,12 +14,11 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
 
-@CommandAlias ("random")
 public class MainCommand extends BaseCommand {
 
 	private static final QuotesJokes plugin = QuotesJokes.getPlugin();
 
-	@Subcommand ("joke")
+	@CommandAlias ("joke")
 	// @Optional items in commands give me problems. Found it easier to have default set if left empty by user
 	private static void onJoke (CommandSender sender, @Default ("send") String action, @Default ("0") String[] numberOrText) {
 		Yaml jokeFile = plugin.getJokeFile();
@@ -46,7 +45,7 @@ public class MainCommand extends BaseCommand {
 
 	}
 
-	@Subcommand ("quote")
+	@CommandAlias ("quote")
 	private static void onQuote (CommandSender sender, @Default ("send") String action, @Default ("0") String[] numberOrText) {
 		Yaml quoteFile = plugin.getQuoteFile();
 		List <String> quoteList = quoteFile.getStringList("quotes");
