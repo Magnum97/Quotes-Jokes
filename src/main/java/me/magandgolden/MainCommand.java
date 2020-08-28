@@ -19,7 +19,7 @@ public class MainCommand extends BaseCommand {
 	private static final QuotesJokes plugin = QuotesJokes.getPlugin();
 
 	@CommandAlias ("joke")
-	// @Optional items in commands give me problems. Found it easier to have default set if left empty by user
+	// @Optional will return null if not provided in command. This needs to be checked before passing to methods
 	private static void onJoke (CommandSender sender, @Default ("send") String action, @Optional String numberOrText) {
 		Yaml jokeFile = plugin.getJokeFile();
 		List <String> jokeList = jokeFile.getStringList("jokes");
@@ -29,17 +29,34 @@ public class MainCommand extends BaseCommand {
 				sendRandom(sender, jokeList);
 				break;
 			case "add":
-				if (! sender.hasPermission("jokes.add"))
+				if (! sender.hasPermission("jokes.add")) {
 					noPermission(sender, "jokes.add");
+					return;
+				}
+				if (numberOrText == null) {
+				// If you don't check and it passes null will throw exception
+					sender.sendMessage(ChatColor.RED + "You need to enter something to add");
+					return;
+				}
 				addFile(sender, jokeFile, "jokes", numberOrText);
 			case "list":
-				if (! sender.hasPermission("jokes.list"))
+				if (! sender.hasPermission("jokes.list")) {
 					noPermission(sender, "jokes.list");
+				return;
+				}
 				sendList(sender, jokeList);
 				break;
 			case "remove":
-				if (! sender.hasPermission("jokes.remove"))
+				if (! sender.hasPermission("jokes.remove")) {
 					noPermission(sender, "jokes.remove");
+					return;
+				}
+				// If you don't check and it passes null will throw exception
+				if (numberOrText == null) {
+					sender.sendMessage(ChatColor.RED + "You need to specify what to remove:");
+					sendList(sender, jokeList);
+					return;
+				}
 				int number = Integer.parseInt(numberOrText);
 				removeFile(sender, jokeFile, "jokes", number);
 				sendList(sender, jokeList);
@@ -120,6 +137,7 @@ public class MainCommand extends BaseCommand {
 
 	private static void noPermission (CommandSender sender, String permission) {
 		String message = "&3You do not have the needed permission: &f" + permission;
+		message = ChatColor.translateAlternateColorCodes('&',message);
 		sender.sendMessage(message);
 	}
 
