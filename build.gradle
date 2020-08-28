@@ -38,26 +38,31 @@ shadowJar {
     classifier = null // remove -all from end of jar
 }
 spigot {
-    authors = ['Magnum1997','GoldenSecrets']
+    authors = ['Magnum1997', 'GoldenSecrets']
     apiVersion = '1.13'
     commands {
-        give {
-            aliases = ['i']
-            description = 'Give command.'
-            permission = 'test.foo'
-            permissionMessage = 'You do not have permission!'
-            usage = '/<command> [test|stop]'
+        joke {
+            description = 'Send, list, add or remove a joke'
+            usage = '/<command> [send|list|add|remove]'
         }
     }
     permissions {
-        'test.foo' {
-            description = 'Allows foo command'
-            defaults = 'true'
+        'jokes.add' {
+            description = 'Add a joke'
+            defaults = 'false'
         }
-        'test.*' {
+        'jokes.list' {
+            description = 'List jokes'
+            defaults = 'false'
+        }
+        'jokes.remove' {
+            description = 'Remove a joke'
+            defaults = 'false'
+        }
+        'jokes.*' {
             description = 'Wildcard permission'
             defaults = 'op'
-            children = ['test.foo': true]
+            children = ['jokes.add': true, "jokes.list": true, "jokes.remove": true]
         }
     }
 }
