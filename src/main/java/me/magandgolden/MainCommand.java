@@ -18,7 +18,7 @@ public class MainCommand extends BaseCommand {
 
 	private static final QuotesJokes plugin = QuotesJokes.getPlugin();
 
-	@CommandAlias ("joke")
+	@CommandAlias ("joke|jokes")
 	// @Optional will return null if not provided in command. This needs to be checked before passing to methods
 	private static void onJoke (CommandSender sender, @Default ("send") String action, @Optional String numberOrText) {
 		Yaml jokeFile = plugin.getJokeFile();
@@ -64,7 +64,7 @@ public class MainCommand extends BaseCommand {
 
 	}
 
-	@CommandAlias ("quote")
+	@CommandAlias ("quote|quotes")
 	private static void onQuote (CommandSender sender, @Default ("send") String action, @Optional String numberOrText) {
 		Yaml quoteFile = plugin.getQuoteFile();
 		List <String> quoteList = quoteFile.getStringList("quotes");
