@@ -9,7 +9,9 @@ import co.aikar.commands.annotation.Optional;
 import de.leonhard.storage.Yaml;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,7 +24,9 @@ public class MainCommand extends BaseCommand {
 	// @Optional will return null if not provided in command. This needs to be checked before passing to methods
 	private static void onJoke (CommandSender sender, @Default ("send") String action, @Optional String numberOrText) {
 		Yaml jokeFile = plugin.getJokeFile();
-		List <String> jokeList = jokeFile.getStringList("jokes");
+		List <String> jokeList = new ArrayList <>();
+		jokeFile.keySet().forEach(u -> jokeList.addAll(jokeFile.getStringList(u)));
+		String uuid = (sender instanceof Player) ? ((Player) sender).getUniqueId().toString() : "console";
 
 		switch (action) {
 			case "send":
@@ -34,15 +38,20 @@ public class MainCommand extends BaseCommand {
 					return;
 				}
 				if (numberOrText == null) {
-				// If you don't check and it passes null will throw exception
+					// If you don't check and it passes null will throw exception
 					sender.sendMessage(ChatColor.RED + "You need to enter something to add");
 					return;
 				}
-				addFile(sender, jokeFile, "jokes", numberOrText);
+				if (! userOverLimit(uuid, jokeFile, "jokes"))
+					addFile(sender, jokeFile, uuid, numberOrText);
+				else {
+					sender.sendMessage("&fPlease remove a joke before adding more");
+					return;
+				}
 			case "list":
 				if (! sender.hasPermission("jokes.list")) {
 					noPermission(sender, "jokes.list");
-				return;
+					return;
 				}
 				sendList(sender, jokeList);
 				break;
@@ -62,6 +71,12 @@ public class MainCommand extends BaseCommand {
 				sendList(sender, jokeList);
 		}
 
+	}
+
+	private static boolean userOverLimit (String uuid, Yaml file, String type) {
+		if (uuid.equals("console"))
+			return false;
+		return (file.getStringList(uuid).size() >= plugin.getCfg().getInt("user-limit." + type));
 	}
 
 	@CommandAlias ("quote|quotes")
@@ -137,7 +152,7 @@ public class MainCommand extends BaseCommand {
 
 	private static void noPermission (CommandSender sender, String permission) {
 		String message = "&3You do not have the needed permission: &f" + permission;
-		message = ChatColor.translateAlternateColorCodes('&',message);
+		message = ChatColor.translateAlternateColorCodes('&', message);
 		sender.sendMessage(message);
 	}
 
