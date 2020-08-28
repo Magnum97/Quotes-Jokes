@@ -14,6 +14,7 @@ public class QuotesJokes extends JavaPlugin {
 	private Yaml quoteFile;
 	@Getter
 	private Yaml jokeFile;
+	@Getter private Yaml cfg;
 
 
 	public void onEnable () {
@@ -34,5 +35,6 @@ public class QuotesJokes extends JavaPlugin {
 		// or load if they already exist.
 		quoteFile = new Yaml("quotes", getDataFolder().toString(), getResource("quotes.yml"));
 		jokeFile = new Yaml("jokes", getDataFolder().toString(), getResource("jokes.yml"));
+		cfg = new Yaml("config",getDataFolder().toString(),getResource("config.yml"));
 	}
 }
