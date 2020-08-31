@@ -26,6 +26,7 @@ public class MainCommand extends BaseCommand {
 		Yaml jokeFile = plugin.getJokeFile();
 		List <String> jokeList = new ArrayList <>();
 		jokeFile.keySet().forEach(u -> jokeList.addAll(jokeFile.getStringList(u)));
+		// If sender is console assign it the id 'console'
 		String uuid = (sender instanceof Player) ? ((Player) sender).getUniqueId().toString() : "console";
 
 		switch (action) {
@@ -33,19 +34,20 @@ public class MainCommand extends BaseCommand {
 				sendRandom(sender, jokeList);
 				break;
 			case "add":
-				if (! sender.hasPermission("jokes.add")) {
-					noPermission(sender, "jokes.add");
-					return;
+				if (! sender.hasPermission("jokes.add")) {  // Check if sender has permission
+					noPermission(sender, "jokes.add");  // if sender does NOT have permission
+					return;// Pass sender and the permission then stop.
 				}
 				if (numberOrText == null) {
 					// If you don't check and it passes null will throw exception
 					sender.sendMessage(ChatColor.RED + "You need to enter something to add");
 					return;
 				}
-				if (! userOverLimit(uuid, jokeFile, "jokes"))
+				if (! userOverLimit(uuid, jokeFile, "jokes")) // Check how many jokes a user has added
 					addFile(sender, jokeFile, uuid, numberOrText);
 				else {
-					sender.sendMessage("&fPlease remove a joke before adding more");
+					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', // New line is ignored
+							"&fPlease remove a joke before adding more")); // Java continues reading until ;
 					return;
 				}
 			case "list":
@@ -74,6 +76,7 @@ public class MainCommand extends BaseCommand {
 	}
 
 	private static boolean userOverLimit (String uuid, Yaml file, String type) {
+		// Ignore limit for console
 		if (uuid.equals("console"))
 			return false;
 		return (file.getStringList(uuid).size() >= plugin.getCfg().getInt("user-limit." + type));
