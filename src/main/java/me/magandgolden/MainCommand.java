@@ -7,15 +7,15 @@ import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Optional;
 import de.leonhard.storage.Yaml;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+@SuppressWarnings ("unused")
 public class MainCommand extends BaseCommand {
 
 	private static final QuotesJokes plugin = QuotesJokes.getPlugin();
@@ -55,7 +55,7 @@ public class MainCommand extends BaseCommand {
 					noPermission(sender, "jokes.list");
 					return;
 				}
-				sendList(sender, jokeList);
+				sendList(sender, jokeFile);
 				break;
 			case "remove":
 				if (! sender.hasPermission("jokes.remove")) {
@@ -65,12 +65,12 @@ public class MainCommand extends BaseCommand {
 				// If you don't check and it passes null will throw exception
 				if (numberOrText == null) {
 					sender.sendMessage(ChatColor.RED + "You need to specify what to remove:");
-					sendList(sender, jokeList);
+					sendList(sender, jokeFile);
 					return;
 				}
 				int number = Integer.parseInt(numberOrText);
 				removeFile(sender, jokeFile, "jokes", number);
-				sendList(sender, jokeList);
+				sendList(sender, jokeFile);
 		}
 
 	}
@@ -93,12 +93,12 @@ public class MainCommand extends BaseCommand {
 			case "add":
 				addFile(sender, quoteFile, "quotes", numberOrText);
 			case "list":
-				sendList(sender, quoteList);
+				sendList(sender, quoteFile);
 				break;
 			case "remove":
 				int number = Integer.parseInt(numberOrText);
 				removeFile(sender, quoteFile, "quotes", number);
-				sendList(sender, quoteList);
+				sendList(sender, quoteFile);
 		}
 	}
 
@@ -110,11 +110,39 @@ public class MainCommand extends BaseCommand {
 		sender.sendMessage(text + " has been added to " + key);
 	}
 
-	private static void sendList (CommandSender sender, List <String> list) {
+	private static void sendList (CommandSender sender, Yaml file) {
+		HashMap <String, List <String>> map = new HashMap <>();
+		String playerName;
+		int i = 0;
+		for (String key : file.keySet()) {
+			if (key.equalsIgnoreCase("console"))
+				playerName = "Server";
+			else
+				playerName = Bukkit.getOfflinePlayer(UUID.fromString(key)).getName();
+//			playerName = (key.equals("console")) ? "Server" : Bukkit.getOfflinePlayer(UUID.fromString(key)).getName();
+			sender.sendMessage(playerName + " ");
+
+			for (String joke : file.getStringList(key)) {
+				i++;
+				joke = ChatColor.translateAlternateColorCodes('&', joke);
+				String message = i + " " + joke;
+				sender.sendMessage(message);
+			}
+		}
+		;
+		//		for (String key : file.keySet()) {
+		//			String userName = key.equals("console") ? "console" : Bukkit.getOfflinePlayer(key).getName();
+		//			map.put(userName, file.getStringList(key));
+		//		}
+		//		String message = map.toString();
+		//		ChatColor.translateAlternateColorCodes('&', message);
+		//		sender.sendMessage(message);
+/*
 		for (int i = 0; i < list.size(); i++) {
 			String message = ChatColor.translateAlternateColorCodes('&', list.get(i));
 			sender.sendMessage((i + 1) + ": " + message);
 		}
+*/
 
 	}
 
