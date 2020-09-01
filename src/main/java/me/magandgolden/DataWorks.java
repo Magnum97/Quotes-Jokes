@@ -70,9 +70,10 @@ public class DataWorks {
 	void removeFile (CommandSender sender, int remove) {
 		remove--;
 		sender.sendMessage("Removed " + list.get(remove));
-		String uuid = map.get(remove); // Find out who owns joke
+		String uuid = map.get(list.get(remove)); // Find out who owns joke
 		map.remove(list.get(remove)); // Remove joke from their uuid
-		file.set(uuid,map); // Set new map to file
+		List <String> localList = new ArrayList<>(map.keySet());
+		file.set(uuid,localList); // Set new map to file
 		file.write();
 	}
 
