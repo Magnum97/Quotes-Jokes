@@ -5,8 +5,6 @@ import de.leonhard.storage.Yaml;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-
 public class QuotesJokes extends JavaPlugin {
 
 	@Getter
@@ -35,8 +33,8 @@ public class QuotesJokes extends JavaPlugin {
 	private void createConfigs () {
 		// This will create "quotes.yml" in the plugins' folder
 		// or load if they already exist.
-		quoteFile = new Yaml("quotes", getDataFolder().toString() + File.separator + "quotes", getResource("quotes.yml"));
-		jokeFile = new Yaml("jokes", getDataFolder().toString() + File.separator + "jokes", getResource("jokes.yml"));
+		quoteFile = new Yaml("quotes", getDataFolder().toString(), getResource("quotes.yml"));
+		jokeFile = new Yaml("jokes", getDataFolder().toString(), getResource("jokes.yml"));
 		cfg = new Yaml("config", getDataFolder().toString(), getResource("config.yml"));
 	}
 }
