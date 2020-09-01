@@ -14,8 +14,8 @@ public class DataWorks {
 
 	private final QuotesJokes plugin = QuotesJokes.getPlugin();
 	private final Yaml file; // This is final - but not initalized. See below
-	private final LinkedList <String> list = new LinkedList <>();
-	private final TreeMap <String, String> map = new TreeMap <>();
+	private final LinkedList <String> list = new LinkedList <>(); // List of joke / quotes
+	private final TreeMap <String, String> map = new TreeMap <>(); // Map of joke & uuid
 	/* final means that it can NOT be changed once it is set.
 	 * The reason we do not need to update is every time you to /joke
 	 * is creates a new instance of DataWorks, with fresh list and map.
@@ -54,8 +54,11 @@ public class DataWorks {
 	/* Command class sets uuid to player id OR console if issues from console
 	 * no need to pass file name or type */
 	void addFile (CommandSender sender, String uuid, String text) {
+		// First get a list of joke THIS user id has
 		List <String> localList = new ArrayList <>(file.getStringList(uuid));
+		// Add to local list
 		localList.add(text);
+		// Add to file with uuid, and updated list
 		file.set(uuid, localList);
 		file.write();
 		sender.sendMessage(text + " has been added to " + uuid);
@@ -65,8 +68,11 @@ public class DataWorks {
 	 * file or type to method ^_^
 	 */
 	void removeFile (CommandSender sender, int remove) {
+		remove--;
 		sender.sendMessage("Removed " + list.get(remove));
-		map.remove(list.get(remove));
+		String uuid = map.get(remove); // Find out who owns joke
+		map.remove(list.get(remove)); // Remove joke from their uuid
+		file.set(uuid,map); // Set new map to file
 		file.write();
 	}
 

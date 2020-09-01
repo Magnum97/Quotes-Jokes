@@ -47,6 +47,7 @@ public class MainCommand extends BaseCommand {
 							"&fPlease remove a joke before adding more")); // Java continues reading until ;
 					return;
 				}
+				break;
 			case "list":
 				if (! sender.hasPermission("jokes.list")) {
 					noPermission(sender, "jokes.list");
@@ -67,7 +68,6 @@ public class MainCommand extends BaseCommand {
 				}
 				int number = Integer.parseInt(numberOrText);
 				dw.removeFile(sender, number);
-				dw.sendList(sender);
 		}
 
 	}
