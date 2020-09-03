@@ -4,10 +4,7 @@ import de.leonhard.storage.Yaml;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DataWorks {
@@ -72,9 +69,26 @@ public class DataWorks {
 		sender.sendMessage("Removed " + list.get(remove));
 		String uuid = map.get(list.get(remove)); // Find out who owns joke
 		map.remove(list.get(remove)); // Remove joke from their uuid
-		List <String> localList = new ArrayList<>(map.keySet());
-		file.set(uuid,localList); // Set new map to file
+		List <String> localList;
+		localList = getKeysFromValue(map, uuid);
+		file.set(uuid, localList); // Set new map to file
 		file.write();
+	}
+
+	private List <String> getKeysFromValue (TreeMap <String, String> map, String uuid) {
+		List <String> jokeStringList = null;
+		// Check if Map contains given value
+		if (map.containsValue(uuid)) {
+			// If it does, get the joke, add to list and return list of jokes
+			jokeStringList = new ArrayList <>();
+			for (Map.Entry <String, String> entry : map.entrySet()) {
+				if (entry.getValue().equals(uuid))
+					jokeStringList.add(entry.getKey());
+			}
+
+		}
+		// return list of jokes - null if user has none in the list
+		return jokeStringList;
 	}
 
 	boolean userOverLimit (String uuid, String type) {
